@@ -18,7 +18,7 @@ class IntroPage extends StatelessWidget {
 
             // Logo title text
             Text(
-              'TreeSure',
+              'TreeSureeeeee',
               style: TextStyle(
                 fontSize: 42,
                 fontWeight: FontWeight.bold,
