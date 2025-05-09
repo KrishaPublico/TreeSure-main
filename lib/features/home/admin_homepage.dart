@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../navbars/applicant_navbar.dart';
+
 class AdminHomepage extends StatelessWidget {
   const AdminHomepage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: const ApplicantNavbar(),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 20),
-
             // Header Stack with QR
             Stack(
               clipBehavior: Clip.none,
@@ -31,7 +33,8 @@ class AdminHomepage extends StatelessWidget {
                         const CircleAvatar(
                           radius: 30,
                           backgroundColor: Colors.white,
-                          child: Icon(Icons.person, size: 40, color: Colors.green),
+                          child:
+                              Icon(Icons.person, size: 40, color: Colors.green),
                         ),
                         const SizedBox(height: 8),
                         const Text(
@@ -66,7 +69,8 @@ class AdminHomepage extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 25,
                           backgroundColor: Colors.white,
-                          child: Icon(Icons.qr_code, size: 30, color: Colors.green),
+                          child: Icon(Icons.qr_code,
+                              size: 30, color: Colors.green),
                         ),
                       ),
                     ),
@@ -127,8 +131,8 @@ class AdminHomepage extends StatelessWidget {
     );
   }
 
-  Widget _buildPermitButton(
-      BuildContext context, String title, IconData icon, VoidCallback onPressed) {
+  Widget _buildPermitButton(BuildContext context, String title, IconData icon,
+      VoidCallback onPressed) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
