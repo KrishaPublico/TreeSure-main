@@ -24,11 +24,11 @@ class IntroPage extends StatelessWidget {
                 clipBehavior: Clip.none, // Allow leaf to overflow if needed
                 children: [
                   Text(
-                    'Krishaaaaa',
+                    'new title',
                     style: TextStyle(
                       fontSize: 42,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green[900],
+                      color: Colors.red[900],
                       fontFamily: 'Poppins',
                     ),
                   ),
