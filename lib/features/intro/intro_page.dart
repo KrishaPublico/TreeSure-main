@@ -24,7 +24,7 @@ class IntroPage extends StatelessWidget {
                 clipBehavior: Clip.none, // Allow leaf to overflow if needed
                 children: [
                   Text(
-                    'TreeSure',
+                    'TreeSureeee',
                     style: TextStyle(
                       fontSize: 42,
                       fontWeight: FontWeight.bold,
