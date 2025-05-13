@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:treesure_app/features/home/home_page.dart';
-import 'package:treesure_app/features/home/admin_homepage.dart';
-import 'package:treesure_app/features/home/forester_homepage.dart';
+import 'package:treesure_app/features/navbars/applicant_navbar.dart'; 
+import 'package:treesure_app/features/navbars/forester_navbar.dart';
+import 'package:treesure_app/features/navbars/admin_navbar.dart';
 
 class LoginPage extends StatefulWidget {
   final String role;
@@ -15,25 +15,26 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   void _login(BuildContext context) {
-  if (widget.role == "forester") {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const ForesterHomepage()),
-    );
-  } else if (widget.role == "admin") {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const AdminHomepage()),
-    );
-  } else {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
-    );
+    if (widget.role == "forester") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ForesterNavbar()),
+      );
+    } else if (widget.role == "admin") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AdminNavbar()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ApplicantNavbar()),
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 15),
               TextFormField(
                 controller: _passwordController,
-                obscureText: true,
+                obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.vpn_key, color: Colors.white),
                   hintText: "Password",
@@ -88,6 +89,17 @@ class _LoginPageState extends State<LoginPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
@@ -119,22 +131,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have an account? "),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Register Now",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
@@ -142,4 +138,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

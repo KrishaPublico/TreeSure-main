@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../navbars/applicant_navbar.dart';
+import 'package:treesure_app/features/admin/ctpo.dart';
+import 'package:treesure_app/features/admin/CuttingPermit.dart';  // Import CuttingPermit.dart
 
 class AdminHomepage extends StatelessWidget {
   const AdminHomepage({super.key});
@@ -8,52 +8,51 @@ class AdminHomepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const ApplicantNavbar(),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 20),
-            // Header Stack with QR
+
+            // Header with Profile and QR Code
             Stack(
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  width: 350,
+                  width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      children: [
-                        Image.asset("assets/treesure_leaf.png", height: 50),
-                        const SizedBox(height: 10),
-                        const CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.white,
-                          child:
-                              Icon(Icons.person, size: 40, color: Colors.green),
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      Image.asset("assets/treesure_leaf.png", height: 50),
+                      const SizedBox(height: 10),
+                      const CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, size: 40, color: Colors.green),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        "Lyca Ambalan Batislaon",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          "Lyca Amblan Batislaon",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Text(
-                          "Admin",
-                          style: TextStyle(fontSize: 14, color: Colors.white70),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
+                      ),
+                      const Text(
+                        "Admin",
+                        style: TextStyle(fontSize: 14, color: Colors.white70),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   ),
                 ),
+
+                // QR Code Positioned Button
                 Positioned(
                   bottom: -25,
                   left: 0,
@@ -64,14 +63,11 @@ class AdminHomepage extends StatelessWidget {
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.qr_code,
-                              size: 30, color: Colors.green),
-                        ),
+                      padding: const EdgeInsets.all(4.0),
+                      child: const CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.qr_code, size: 30, color: Colors.green),
                       ),
                     ),
                   ),
@@ -81,28 +77,51 @@ class AdminHomepage extends StatelessWidget {
 
             const SizedBox(height: 60),
 
+            // Permit Buttons
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Column(
                 children: [
+                  // Manage Users button
+                  _buildPermitButton(
+                    context,
+                    "Manage Users",
+                    Icons.person_add,
+                    () {
+                      // TODO: Navigate to Manage Users page
+                    },
+                  ),
+                  const SizedBox(height: 15),
+
+                  // CTPO button
                   _buildPermitButton(
                     context,
                     "CTPO (Certificate of Tree Plantation Ownership)",
                     Icons.description,
                     () {
-                      // TODO: Navigate to CTPO page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CTPOUploadPage()),
+                      );
                     },
                   ),
                   const SizedBox(height: 15),
+
+                  // Cutting Permit button (Navigates to CuttingPermit.dart)
                   _buildPermitButton(
                     context,
                     "Cutting Permit",
                     Icons.content_cut,
                     () {
-                      // TODO: Navigate to Cutting Permit page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CuttingPermitPage()),
+                      );
                     },
                   ),
                   const SizedBox(height: 15),
+
+                  // Certificate to Travel (COV) button
                   _buildPermitButton(
                     context,
                     "Certificate to Travel (COV)",
@@ -112,12 +131,25 @@ class AdminHomepage extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 15),
+
+                  // Chainsaw Permit button
                   _buildPermitButton(
                     context,
                     "Chainsaw Permit",
                     Icons.build,
                     () {
                       // TODO: Navigate to Chainsaw Permit page
+                    },
+                  ),
+                  const SizedBox(height: 15),
+
+                  // Reports button
+                  _buildPermitButton(
+                    context,
+                    "Reports",
+                    Icons.bar_chart,
+                    () {
+                      // TODO: Navigate to Reports page
                     },
                   ),
                 ],
@@ -131,8 +163,8 @@ class AdminHomepage extends StatelessWidget {
     );
   }
 
-  Widget _buildPermitButton(BuildContext context, String title, IconData icon,
-      VoidCallback onPressed) {
+  Widget _buildPermitButton(
+      BuildContext context, String title, IconData icon, VoidCallback onPressed) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -154,6 +186,9 @@ class AdminHomepage extends StatelessWidget {
                 style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
+            // Add indicator if the option has nested items (Dropdown indicator)
+            if (title == "Non Timber" || title == "Tenurial Instrument")
+              const Icon(Icons.arrow_drop_down, color: Colors.white),
           ],
         ),
       ),

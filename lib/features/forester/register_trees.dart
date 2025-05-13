@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 class RegisterTreesPage extends StatefulWidget {
   const RegisterTreesPage({super.key});
@@ -14,7 +15,8 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
   final TextEditingController specieController = TextEditingController();
   final TextEditingController diameterController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
-  final TextEditingController gpsLocationController = TextEditingController();
+  final TextEditingController northingController = TextEditingController();
+  final TextEditingController eastingController = TextEditingController();
   final TextEditingController volumeController = TextEditingController();
 
   File? imageFile;
@@ -26,7 +28,8 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
     specieController.dispose();
     diameterController.dispose();
     heightController.dispose();
-    gpsLocationController.dispose();
+    northingController.dispose();
+    eastingController.dispose();
     volumeController.dispose();
     super.dispose();
   }
@@ -47,9 +50,49 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
   }
 
   void generateQrTag() {
-    // Implement QR code generation logic here
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("QR Code generated based on tree details")),
+    );
+  }
+
+  void viewSummaryDialog() {
+    Map<String, String> submittedData = {
+      "Tree No.": treeNoController.text,
+      "Specie": specieController.text,
+      "Diameter (cm)": diameterController.text,
+      "Height (m)": heightController.text,
+      "Volume (CU m)": volumeController.text,
+      "GPS Location - Northing": northingController.text,
+      "GPS Location - Easting": eastingController.text,
+      "Photo Evidence": imageFile != null ? path.basename(imageFile!.path) : "No image selected",
+    };
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Tree Data Summary"),
+        content: SingleChildScrollView(
+          child: DataTable(
+            columnSpacing: 10,
+            columns: const [
+              DataColumn(label: Text("Field", style: TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(label: Text("Value", style: TextStyle(fontWeight: FontWeight.bold))),
+            ],
+            rows: submittedData.entries.map((entry) {
+              return DataRow(cells: [
+                DataCell(Text(entry.key)),
+                DataCell(Text(entry.value)),
+              ]);
+            }).toList(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Close"),
+          )
+        ],
+      ),
     );
   }
 
@@ -60,6 +103,13 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
         title: const Text("Tree Inventory"),
         backgroundColor: Colors.green[800],
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.qr_code),
+            tooltip: 'Generate QR Tag',
+            onPressed: generateQrTag,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,17 +117,23 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
           children: [
             buildTextField("Tree No.", treeNoController),
             buildTextField("Specie", specieController),
-            buildTextField("Diameter (cm)", diameterController),
-            buildTextField("Height (m)", heightController),
-            buildTextField("GPS Location", gpsLocationController),
-            buildTextField("Volume (CU, m)", volumeController),
+            Row(
+              children: [
+                Expanded(child: buildTextField("Diameter (cm)", diameterController)),
+                const SizedBox(width: 12),
+                Expanded(child: buildTextField("Height (m)", heightController)),
+              ],
+            ),
+            buildTextField("Volume (CU m)", volumeController),
             const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: generateQrTag,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green[700],
-              ),
-              child: const Text("Generate QR Tag", style: TextStyle(color: Colors.white)),
+            const Text("GPS Location", style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(child: buildTextField("Northing", northingController)),
+                const SizedBox(width: 12),
+                Expanded(child: buildTextField("Easting", eastingController)),
+              ],
             ),
             const SizedBox(height: 20),
             const Text("Photo Evidence", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -93,13 +149,24 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Handle form submission here
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Submitted")),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green[800],
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               child: const Text("Submit", style: TextStyle(fontSize: 16, color: Colors.white)),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: viewSummaryDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green[800],
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text("View Summary", style: TextStyle(fontSize: 16, color: Colors.white)),
             ),
           ],
         ),

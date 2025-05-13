@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:treesure_app/features/intro/intro_page.dart';
 import 'package:treesure_app/features/login/login_page.dart';
+import 'package:treesure_app/features/intro/intro_page.dart'; // Make sure this import path is correct
 
 class RolePage extends StatelessWidget {
   const RolePage({super.key});
@@ -8,6 +8,19 @@ class RolePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double buttonWidth = 180;
+
+    final ButtonStyle commonButtonStyle = ElevatedButton.styleFrom(
+      backgroundColor: Colors.green[800],
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25),
+      ),
+      textStyle: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -38,26 +51,16 @@ class RolePage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Admin Button (placeholder)
+            // Admin Button
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[800],
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
+                style: commonButtonStyle,
                 onPressed: () {
-                  
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginPage(role: "admin")),
-                    );
-
-
+                  );
                 },
                 child: const Text("Admin"),
               ),
@@ -68,18 +71,11 @@ class RolePage extends StatelessWidget {
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[800],
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
+                style: commonButtonStyle,
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage(role: "forester")),
+                    MaterialPageRoute(builder: (context) => const LoginPage(role: "forester")),
                   );
                 },
                 child: const Text("Forester"),
@@ -91,18 +87,11 @@ class RolePage extends StatelessWidget {
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[600],
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
+                style: commonButtonStyle,
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage(role: "applicant")),
+                    MaterialPageRoute(builder: (context) => const LoginPage(role: "applicant")),
                   );
                 },
                 child: const Text("Applicant"),
@@ -114,14 +103,7 @@ class RolePage extends StatelessWidget {
             SizedBox(
               width: buttonWidth,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[600],
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
+                style: commonButtonStyle,
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
