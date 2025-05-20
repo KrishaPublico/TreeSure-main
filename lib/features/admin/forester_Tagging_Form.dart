@@ -45,9 +45,10 @@ class _ForesterTaggingFormPageState extends State<ForesterTaggingFormPage> {
             children: [
               Text(
                 'Selected Foresters:\n${widget.selectedForesters.join(', ')}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
+                  color: Colors.green[900], // dark green text color
                 ),
               ),
               const SizedBox(height: 16),

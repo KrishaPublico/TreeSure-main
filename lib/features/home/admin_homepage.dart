@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:treesure_app/features/admin/ctpo.dart';
 import 'package:treesure_app/features/admin/CuttingPermit.dart';
+import 'package:treesure_app/features/admin/manage_user.dart';
+import 'package:treesure_app/features/admin/summary_Reports.dart'; // Import Summary Reports
 
 class AdminHomepage extends StatelessWidget {
   const AdminHomepage({super.key});
@@ -144,7 +146,7 @@ class AdminHomepage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20), // Reduced spacing
+            const SizedBox(height: 20),
 
             // Permit buttons
             Padding(
@@ -155,9 +157,14 @@ class AdminHomepage extends StatelessWidget {
                     context,
                     "Manage Users",
                     Icons.person_add,
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ManageUserPage()),
+                      );
+                    },
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 8),
                   _buildPermitButton(
                     context,
                     "CTPO (Certificate of Tree Plantation Ownership)",
@@ -169,7 +176,7 @@ class AdminHomepage extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 8),
                   _buildPermitButton(
                     context,
                     "Cutting Permit",
@@ -181,26 +188,31 @@ class AdminHomepage extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 8),
                   _buildPermitButton(
                     context,
                     "Certificate to Travel (COV)",
                     Icons.directions_bus,
                     () {},
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 8),
                   _buildPermitButton(
                     context,
                     "Chainsaw Permit",
                     Icons.build,
                     () {},
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 8),
                   _buildPermitButton(
                     context,
                     "Reports",
                     Icons.bar_chart,
-                    () {},
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SummaryReportsPage()),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -240,11 +252,10 @@ class AdminHomepage extends StatelessWidget {
                 style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
-            if (title == "Non Timber" || title == "Tenurial Instrument")
-              const Icon(Icons.arrow_drop_down, color: Colors.white),
           ],
         ),
       ),
     );
   }
 }
+
