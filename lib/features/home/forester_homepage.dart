@@ -112,7 +112,7 @@ class ForesterHomepage extends StatelessWidget {
                   context,
                   "Tree Mapping",
                   Icons.map,
-                  Colors.green[700]!,
+                  Colors.green[800]!,
                   () {
                     // TODO: Add Tree Mapping Page navigation
                   },
@@ -122,7 +122,7 @@ class ForesterHomepage extends StatelessWidget {
                   context,
                   "Reports",
                   Icons.insert_chart_outlined,
-                  Colors.green[600]!,
+                  Colors.green[800]!,
                   () {
                     // TODO: Add Reports Page navigation
                   },
