@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 
 class SPLTFormPage extends StatefulWidget {
   const SPLTFormPage({Key? key}) : super(key: key);
@@ -22,21 +21,10 @@ class _SPLTPFormPageState extends State<SPLTFormPage> {
     "**Additional if school/organization**||7. PTA Resolution or Resolution from any organized group of no objection and reason for cutting for School/Organization (1 original)": null,
   };
 
-  Future<void> pickFile(String label) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        uploadedFiles[label] = result.files.single.name;
-      });
-    }
-  }
-
   Widget buildUploadField(String label) {
     final isIndented = label.startsWith("3.a") || label.startsWith("3.b") || label.startsWith("3.c");
     final noUpload = label.startsWith("3. Endorsement from concerned LGU");
 
-    // Handle bold prefix split
     String? boldText;
     String displayText = label;
 
@@ -63,7 +51,7 @@ class _SPLTPFormPageState extends State<SPLTFormPage> {
                             children: [
                               TextSpan(
                                 text: "$boldText\n",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
@@ -71,7 +59,7 @@ class _SPLTPFormPageState extends State<SPLTFormPage> {
                               ),
                               TextSpan(
                                 text: displayText,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black,
@@ -82,18 +70,26 @@ class _SPLTPFormPageState extends State<SPLTFormPage> {
                         )
                       : Text(
                           label,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                 ),
               ),
               if (!noUpload)
                 ElevatedButton(
-                  onPressed: () => pickFile(label),
+                  onPressed: () {
+                    // Placeholder: You can add file picker logic here
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Upload clicked for: $label'),
+                        backgroundColor: Colors.green[700],
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[700],
                     foregroundColor: Colors.white,
                   ),
-                  child: Text("Upload File"),
+                  child: const Text("Upload File"),
                 ),
             ],
           ),
@@ -113,7 +109,7 @@ class _SPLTPFormPageState extends State<SPLTFormPage> {
   void handleSubmit() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Form submitted!"),
+        content: const Text("Form submitted!"),
         backgroundColor: Colors.green[700],
       ),
     );
@@ -123,7 +119,7 @@ class _SPLTPFormPageState extends State<SPLTFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SPLTP Application Form'),
+        title: const Text('SPLTP Application Form'),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
@@ -132,7 +128,7 @@ class _SPLTPFormPageState extends State<SPLTFormPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Issuance of Special Private Land Timber Permit (SPLTP) for Premium/Naturally Grown Trees Within Private/Titled Lands',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -147,13 +143,13 @@ class _SPLTPFormPageState extends State<SPLTFormPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[700],
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ),
             ),

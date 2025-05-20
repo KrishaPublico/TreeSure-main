@@ -82,6 +82,21 @@ class ForesterHomepage extends StatelessWidget {
               children: [
                 _buildMenuButton(
                   context,
+                  "50 Registered Trees",
+                  Icons.check_circle,
+                  Colors.green[800]!,
+                  () {
+                    // TODO: Add navigation to registered trees
+                  },
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                _buildMenuButton(
+                  context,
                   "Tree Inventory",
                   Icons.forest,
                   Colors.green[800]!,
@@ -137,22 +152,36 @@ class ForesterHomepage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuButton(BuildContext context, String title, IconData icon, Color color, VoidCallback onPressed) {
+  Widget _buildMenuButton(
+    BuildContext context,
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onPressed, {
+    TextStyle? textStyle,
+  }) {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton.icon(
-        icon: Icon(icon, color: Colors.white),
-        label: Text(
-          title,
-          style: const TextStyle(fontSize: 16, color: Colors.white),
-        ),
+      child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: textStyle ?? const TextStyle(fontSize: 16, color: Colors.white),
+              ),
+            ),
+          ],
         ),
       ),
     );

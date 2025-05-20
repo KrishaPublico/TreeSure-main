@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 
 class CTPOUploadPage extends StatefulWidget {
   @override
@@ -18,55 +17,37 @@ class _CTPOUploadPageState extends State<CTPOUploadPage> {
     "5. Special Power of Attorney (SPA) (1 original) – [Applicable if the client is a representative]": null,
   };
 
-  Future<void> pickFile(String label) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        uploadedFiles[label] = result.files.single.name;
-      });
-    }
-  }
-
   Widget buildUploadField(String label) {
     final isIndented = label.startsWith("4.a") || label.startsWith("4.b") || label.startsWith("4.c");
     final noUpload = label == "4. Endorsement from concerned LGU interposing no objection to the cutting of tree under the following conditions (1 original)";
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: isIndented ? 24.0 : 0),
-                  child: Text(
-                    label,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ),
-              if (!noUpload)
-                ElevatedButton(
-                  onPressed: () => pickFile(label),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[700],
-                    foregroundColor: Colors.white,
-                  ),
-                  child: Text("Upload File"),
-                ),
-            ],
-          ),
-          if (uploadedFiles[label] != null)
-            Padding(
-              padding: EdgeInsets.only(top: 4.0, left: isIndented ? 24.0 : 0),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: isIndented ? 24.0 : 0),
               child: Text(
-                'Selected: ${uploadedFiles[label]}',
-                style: TextStyle(fontSize: 13, color: Colors.green[700]),
+                label,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
+            ),
+          ),
+          if (!noUpload)
+            ElevatedButton(
+              onPressed: null, // Non-functional
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return Colors.green.shade600;
+                  }
+                  return Colors.green;
+                }),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
+              child: Text("Upload File"),
             ),
         ],
       ),
@@ -74,6 +55,20 @@ class _CTPOUploadPageState extends State<CTPOUploadPage> {
   }
 
   void handleSubmit() {
+    bool allRequiredUploaded = uploadedFiles.entries
+        .where((e) => e.key != "4. Endorsement from concerned LGU interposing no objection to the cutting of tree under the following conditions (1 original)")
+        .every((entry) => entry.value != null);
+
+    if (!allRequiredUploaded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Please upload all required files."),
+          backgroundColor: Colors.red[700],
+        ),
+      );
+      return;
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("Form submitted!"),

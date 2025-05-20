@@ -4,6 +4,8 @@ import 'home_widgets.dart';
 class ApplicantHomepage extends StatelessWidget {
   const ApplicantHomepage({super.key});
 
+  final int totalRestrictedTrees = 30;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +74,43 @@ class ApplicantHomepage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 30), // Adjusted from 40 to 30 for less spacing
+
+            // Total Trees Button
+            SizedBox(
+              width: 250,
+              height: 60,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Total Restricted Trees: $totalRestrictedTrees'),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.park_rounded,
+                  size: 36,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  'Total Trees: $totalRestrictedTrees',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:  const Color.fromARGB(255, 52, 123, 57),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -89,6 +127,7 @@ class ApplicantHomepage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
+
             buildTreeRestrictionCard(
               "Trees marked by the DENR as Significant or Important",
               "assets/pic1.jpg",
@@ -101,6 +140,8 @@ class ApplicantHomepage extends StatelessWidget {
               "Trees that add beauty to public areas",
               "assets/pic3.JPG",
             ),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),

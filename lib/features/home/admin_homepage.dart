@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:treesure_app/features/admin/ctpo.dart';
-import 'package:treesure_app/features/admin/CuttingPermit.dart';  // Import CuttingPermit.dart
+import 'package:treesure_app/features/admin/CuttingPermit.dart';
 
 class AdminHomepage extends StatelessWidget {
   const AdminHomepage({super.key});
+
+  final int totalUsers = 42; // Dummy data
+  final int totalTrees = 123; // Dummy data
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class AdminHomepage extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
 
-            // Header with Profile and QR Code
+            // Header with profile
             Stack(
               clipBehavior: Clip.none,
               children: [
@@ -51,8 +54,6 @@ class AdminHomepage extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // QR Code Positioned Button
                 Positioned(
                   bottom: -25,
                   left: 0,
@@ -77,23 +78,86 @@ class AdminHomepage extends StatelessWidget {
 
             const SizedBox(height: 60),
 
-            // Permit Buttons
+            // Total Users & Total Trees buttons side-by-side
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 70,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.group, size: 30, color: Colors.white),
+                        label: Text(
+                          'Users\n$totalUsers',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Total Users: $totalUsers')),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 52, 123, 57),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: SizedBox(
+                      height: 70,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.park, size: 30, color: Colors.white),
+                        label: Text(
+                          'Trees\n$totalTrees',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Total Trees: $totalTrees')),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 52, 123, 57),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20), // Reduced spacing
+
+            // Permit buttons
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Column(
                 children: [
-                  // Manage Users button
                   _buildPermitButton(
                     context,
                     "Manage Users",
                     Icons.person_add,
-                    () {
-                      // TODO: Navigate to Manage Users page
-                    },
+                    () {},
                   ),
                   const SizedBox(height: 15),
-
-                  // CTPO button
                   _buildPermitButton(
                     context,
                     "CTPO (Certificate of Tree Plantation Ownership)",
@@ -106,8 +170,6 @@ class AdminHomepage extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 15),
-
-                  // Cutting Permit button (Navigates to CuttingPermit.dart)
                   _buildPermitButton(
                     context,
                     "Cutting Permit",
@@ -120,37 +182,25 @@ class AdminHomepage extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 15),
-
-                  // Certificate to Travel (COV) button
                   _buildPermitButton(
                     context,
                     "Certificate to Travel (COV)",
                     Icons.directions_bus,
-                    () {
-                      // TODO: Navigate to COV page
-                    },
+                    () {},
                   ),
                   const SizedBox(height: 15),
-
-                  // Chainsaw Permit button
                   _buildPermitButton(
                     context,
                     "Chainsaw Permit",
                     Icons.build,
-                    () {
-                      // TODO: Navigate to Chainsaw Permit page
-                    },
+                    () {},
                   ),
                   const SizedBox(height: 15),
-
-                  // Reports button
                   _buildPermitButton(
                     context,
                     "Reports",
                     Icons.bar_chart,
-                    () {
-                      // TODO: Navigate to Reports page
-                    },
+                    () {},
                   ),
                 ],
               ),
@@ -164,7 +214,11 @@ class AdminHomepage extends StatelessWidget {
   }
 
   Widget _buildPermitButton(
-      BuildContext context, String title, IconData icon, VoidCallback onPressed) {
+    BuildContext context,
+    String title,
+    IconData icon,
+    VoidCallback onPressed,
+  ) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -186,7 +240,6 @@ class AdminHomepage extends StatelessWidget {
                 style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
-            // Add indicator if the option has nested items (Dropdown indicator)
             if (title == "Non Timber" || title == "Tenurial Instrument")
               const Icon(Icons.arrow_drop_down, color: Colors.white),
           ],
