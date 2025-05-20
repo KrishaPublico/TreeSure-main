@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:treesure_app/features/forester/applicant_detail_page.dart';
 class NotifPage_Forester extends StatefulWidget {
   const NotifPage_Forester({super.key});
 
@@ -52,20 +52,30 @@ class _NotifPageState extends State<NotifPage_Forester> {
                 ),
               ),
             ),
-            // Notifications
+            // Notifications List
             Expanded(
               child: ListView.builder(
-                itemCount: 5,
+                itemCount: 5, // Adjust the count as needed
                 itemBuilder: (context, index) {
-                  return const ListTile(
-                    leading: CircleAvatar(
+                  return ListTile(
+                    leading: const CircleAvatar(
                       backgroundColor: Colors.green,
-                      child:
-                          Icon(Icons.notifications_active, color: Colors.white),
+                      child: Icon(Icons.notifications_active, color: Colors.white),
                     ),
-                    title: Text("Notification Title"),
-                    subtitle: Text("Notification Message"),
-                    trailing: Text("12:00 PM"),
+                    title: const Text("Notification Title"),
+                    subtitle: const Text("Applicant's requirement details here"),
+                    trailing: const Text("12:00 PM"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ApplicantDetailPage(
+                            applicantName: "Applicant",
+                            requirementDetails: "Details about the applicant's requirements.",
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
