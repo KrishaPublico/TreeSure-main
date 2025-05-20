@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'forester_assign.dart'; // Make sure this path is correct
 
 class CTPOUploadPage extends StatefulWidget {
   @override
@@ -37,15 +38,15 @@ class _CTPOUploadPageState extends State<CTPOUploadPage> {
           ),
           if (!noUpload)
             ElevatedButton(
-              onPressed: null, // Non-functional
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.green.shade600;
-                  }
-                  return Colors.green;
-                }),
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              onPressed: () {
+                // Placeholder for file picker
+                setState(() {
+                  uploadedFiles[label] = "dummy_file.pdf";
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
               ),
               child: Text("Upload File"),
             ),
@@ -55,24 +56,19 @@ class _CTPOUploadPageState extends State<CTPOUploadPage> {
   }
 
   void handleSubmit() {
-    bool allRequiredUploaded = uploadedFiles.entries
-        .where((e) => e.key != "4. Endorsement from concerned LGU interposing no objection to the cutting of tree under the following conditions (1 original)")
-        .every((entry) => entry.value != null);
-
-    if (!allRequiredUploaded) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Please upload all required files."),
-          backgroundColor: Colors.red[700],
-        ),
-      );
-      return;
+    // Determine endorsement level for forester assignment
+    String type = "barangay"; // default
+    if (uploadedFiles["4.c If the trees to be cut fall within more than one municipality/city, endorsement shall be secured either from the Provincial Governor or all the Municipality/City Mayors concerned"] != null) {
+      type = "province";
+    } else if (uploadedFiles["4.b If the trees to be cut falls within more than one barangay, endorsement shall be secured either from the Municipal/City Mayor or all the Barangay Captains concerned"] != null) {
+      type = "municipality";
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Form submitted!"),
-        backgroundColor: Colors.green[700],
+    // Navigate to the Forester Assignment page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ForesterAssignmentPage(type: type),
       ),
     );
   }
@@ -83,10 +79,7 @@ class _CTPOUploadPageState extends State<CTPOUploadPage> {
       appBar: AppBar(
         backgroundColor: Colors.green[700],
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text(
-          'CTPO File Upload',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: Text('CTPO File Upload', style: TextStyle(color: Colors.white)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
