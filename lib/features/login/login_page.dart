@@ -18,20 +18,28 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
 
   void _login(BuildContext context) {
-    if (widget.role == "forester") {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const ForesterNavbar()),
-      );
-    } else if (widget.role == "admin") {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const AdminNavbar()),
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const ApplicantNavbar()),
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    bool valid = false;
+
+    if (widget.role == "forester" && email == "forester@gmail.com" && password == "1234") {
+      valid = true;
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ForesterNavbar()));
+    } else if (widget.role == "admin" && email == "admin@gmail.com" && password == "1234") {
+      valid = true;
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AdminNavbar()));
+    } else if (widget.role == "applicant" && email == "user@gmail.com" && password == "1234") {
+      valid = true;
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ApplicantNavbar()));
+    }
+
+    if (!valid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Invalid email or password."),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
