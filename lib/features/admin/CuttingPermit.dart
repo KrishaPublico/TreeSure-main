@@ -64,7 +64,7 @@ class CuttingPermitPage extends StatelessWidget {
     return Card(
       color: Colors.green[700],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 5), // Reduced spacing
       child: InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(12),
@@ -85,7 +85,7 @@ class CuttingPermitPage extends StatelessWidget {
     return Card(
       color: Colors.green[700],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 5), // Reduced spacing
       child: Theme(
         data: Theme.of(context).copyWith(
           dividerColor: Colors.transparent,

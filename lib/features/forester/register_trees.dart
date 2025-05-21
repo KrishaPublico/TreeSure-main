@@ -19,8 +19,29 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
   final TextEditingController eastingController = TextEditingController();
   final TextEditingController volumeController = TextEditingController();
 
+  final FocusNode treeNoFocus = FocusNode();
+  final FocusNode specieFocus = FocusNode();
+  final FocusNode diameterFocus = FocusNode();
+  final FocusNode heightFocus = FocusNode();
+  final FocusNode northingFocus = FocusNode();
+  final FocusNode eastingFocus = FocusNode();
+
   File? imageFile;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    diameterController.addListener(_updateVolume);
+    heightController.addListener(_updateVolume);
+  }
+
+  void _updateVolume() {
+    double diameter = double.tryParse(diameterController.text) ?? 0;
+    double height = double.tryParse(heightController.text) ?? 0;
+    double volume = 3.141592653589793 * (diameter / 2) * (diameter / 2) * height;
+    volumeController.text = volume > 0 ? volume.toStringAsFixed(2) : '';
+  }
 
   @override
   void dispose() {
@@ -31,6 +52,14 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
     northingController.dispose();
     eastingController.dispose();
     volumeController.dispose();
+
+    treeNoFocus.dispose();
+    specieFocus.dispose();
+    diameterFocus.dispose();
+    heightFocus.dispose();
+    northingFocus.dispose();
+    eastingFocus.dispose();
+
     super.dispose();
   }
 
@@ -56,7 +85,7 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
   }
 
   void viewSummaryDialog() {
-    Map<String, String> submittedData = {
+    Map<String, dynamic> submittedData = {
       "Tree No.": treeNoController.text,
       "Specie": specieController.text,
       "Diameter (cm)": diameterController.text,
@@ -65,6 +94,15 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
       "GPS Location - Northing": northingController.text,
       "GPS Location - Easting": eastingController.text,
       "Photo Evidence": imageFile != null ? path.basename(imageFile!.path) : "No image selected",
+    };
+
+    final Map<String, FocusNode> focusMap = {
+      "Tree No.": treeNoFocus,
+      "Specie": specieFocus,
+      "Diameter (cm)": diameterFocus,
+      "Height (m)": heightFocus,
+      "GPS Location - Northing": northingFocus,
+      "GPS Location - Easting": eastingFocus,
     };
 
     showDialog(
@@ -77,11 +115,27 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
             columns: const [
               DataColumn(label: Text("Field", style: TextStyle(fontWeight: FontWeight.bold))),
               DataColumn(label: Text("Value", style: TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(label: Text("Edit", style: TextStyle(fontWeight: FontWeight.bold))),
             ],
             rows: submittedData.entries.map((entry) {
+              final key = entry.key;
+              final value = entry.value.toString();
+              final canEdit = focusMap.containsKey(key);
+
               return DataRow(cells: [
-                DataCell(Text(entry.key)),
-                DataCell(Text(entry.value)),
+                DataCell(Text(key)),
+                DataCell(Text(value)),
+                DataCell(
+                  canEdit
+                      ? IconButton(
+                          icon: Icon(Icons.edit, color: Colors.green[700]),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            FocusScope.of(context).requestFocus(focusMap[key]);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                ),
               ]);
             }).toList(),
           ),
@@ -89,7 +143,10 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Close"),
+            child: Text(
+              "Close",
+              style: TextStyle(color: Colors.green[700]),
+            ),
           )
         ],
       ),
@@ -115,24 +172,24 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            buildTextField("Tree No.", treeNoController),
-            buildTextField("Specie", specieController),
+            buildTextField("Tree No.", treeNoController, focusNode: treeNoFocus),
+            buildTextField("Specie", specieController, focusNode: specieFocus),
             Row(
               children: [
-                Expanded(child: buildTextField("Diameter (cm)", diameterController)),
+                Expanded(child: buildTextField("Diameter (cm)", diameterController, focusNode: diameterFocus, keyboardType: TextInputType.number)),
                 const SizedBox(width: 12),
-                Expanded(child: buildTextField("Height (m)", heightController)),
+                Expanded(child: buildTextField("Height (m)", heightController, focusNode: heightFocus, keyboardType: TextInputType.number)),
               ],
             ),
-            buildTextField("Volume (CU m)", volumeController),
+            buildTextField("Volume (CU m)", volumeController, enabled: false),
             const SizedBox(height: 12),
             const Text("GPS Location", style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Row(
               children: [
-                Expanded(child: buildTextField("Northing", northingController)),
+                Expanded(child: buildTextField("Northing", northingController, focusNode: northingFocus)),
                 const SizedBox(width: 12),
-                Expanded(child: buildTextField("Easting", eastingController)),
+                Expanded(child: buildTextField("Easting", eastingController, focusNode: eastingFocus)),
               ],
             ),
             const SizedBox(height: 20),
@@ -174,11 +231,15 @@ class _RegisterTreesPageState extends State<RegisterTreesPage> {
     );
   }
 
-  Widget buildTextField(String label, TextEditingController controller) {
+  Widget buildTextField(String label, TextEditingController controller,
+      {FocusNode? focusNode, bool enabled = true, TextInputType? keyboardType}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: TextField(
         controller: controller,
+        focusNode: focusNode,
+        enabled: enabled,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),

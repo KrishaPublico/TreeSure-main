@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SummaryReportsPage extends StatelessWidget {
-  const SummaryReportsPage({super.key});
+class ForesterSummaryReports extends StatelessWidget {
+  const ForesterSummaryReports({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.green[700],
+        backgroundColor:Colors.green[800],
         title: const Text(
           "Summary Reports",
           style: TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treesure_app/features/forester/register_trees.dart';
+import 'package:treesure_app/features/forester/forester_summary_reports.dart';
 
 class ForesterHomepage extends StatelessWidget {
   const ForesterHomepage({super.key});
@@ -94,7 +95,7 @@ class ForesterHomepage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 15), // keep spacing above Tree Inventory
                 _buildMenuButton(
                   context,
                   "Tree Inventory",
@@ -107,7 +108,7 @@ class ForesterHomepage extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 8), // reduced spacing
                 _buildMenuButton(
                   context,
                   "Tree Mapping",
@@ -117,14 +118,17 @@ class ForesterHomepage extends StatelessWidget {
                     // TODO: Add Tree Mapping Page navigation
                   },
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 8), // reduced spacing
                 _buildMenuButton(
                   context,
                   "Reports",
                   Icons.insert_chart_outlined,
                   Colors.green[800]!,
                   () {
-                    // TODO: Add Reports Page navigation
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ForesterSummaryReports()),
+                    );
                   },
                 ),
               ],
